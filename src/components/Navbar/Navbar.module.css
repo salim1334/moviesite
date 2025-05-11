@@ -1,0 +1,133 @@
+.navbar {
+  width: 100%;
+  padding: 20px 6%;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  font-size: 14px;
+  color: #e5e5e5;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.7) 10%,
+    transparent
+  );
+  z-index: 1;
+}
+
+.leftCon {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.leftCon img {
+  width: 90px;
+}
+
+.leftCon ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.leftCon ul li {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.leftCon ul li:hover {
+  color: #e50914;
+  transform: scale(1.02);
+  text-decoration: underline;
+}
+
+.rightCon {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.rightCon > *:hover {
+  color: #e50914;
+  transform: scale(1.02);
+  text-decoration: underline;
+}
+
+.rightCon .icons {
+  width: 20px;
+  cursor: pointer;
+}
+
+.rightCon .icons:hover {
+  color: #ed525a;
+  transform: scale(1.02);
+  text-decoration: underline;
+}
+
+.rightCon .profile {
+  border-radius: 4px;
+  width: 35px;
+}
+
+.profileCon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.navbar .dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width:max-content;
+  border-radius: 4px;
+  background-color: #191919;
+  padding: 16px 20px;
+  border-radius: underline;
+  z-index: 1;
+  display: none;
+}
+
+.navbar .dropdown p {
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.profileCon:hover .dropdown {
+  display: block;
+}
+
+.nav_dark {
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.9) 60%,
+    transparent
+  );
+}
+
+@media (max-width: 800px) {
+  .navbar {
+    padding: 20px 4%;
+  }
+
+  .leftCon ul {
+    display: none;
+  }
+
+  .navbar img {
+    height: 25px;
+  }
+}
+
+@media (max-width: 500px) {
+  .navbar img {
+    height: 20px;
+  }
+
+  .rightCon {
+    gap: 10px;
+  }
+}
