@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './MovieRow.module.css';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 function MovieRow({ title, category, isPoster }) {
   const [movies, setMovies] = useState([]);
@@ -28,6 +28,8 @@ function MovieRow({ title, category, isPoster }) {
   return (
     <div className={styles.movieRow}>
       <h2>{title ? title : 'Popular Movies'}</h2>
+      <div className={styles.fadeLeft}></div>
+      <div className={styles.fadeRight}></div>
       <div className={styles.card_list}>
         {movies?.map((card, i) => {
           return (

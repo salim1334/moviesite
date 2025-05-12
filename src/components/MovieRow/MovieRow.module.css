@@ -4,7 +4,7 @@
 }
 
 .movieRow h2 {
-  margin-bottom: 8px;
+  margin: 0 0 8px 10px;
 }
 
 .card_list {
@@ -66,4 +66,27 @@
   .card_list p {
     font-size: 10px;
   }
+}
+
+.movieRow {
+  position: relative;
+}
+
+.fadeLeft,
+.fadeRight {
+  position: absolute;
+  top: 0;
+  width: 50px;
+  height: 100%;
+  z-index: 10;
+}
+
+.fadeLeft {
+  left: 0;
+  background: linear-gradient(to right, #141414, transparent);
+}
+
+.fadeRight {
+  right: 0;
+  background: linear-gradient(to left, #141414, transparent);
 }
