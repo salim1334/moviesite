@@ -1,5 +1,5 @@
 import styles from './Main.module.css';
-import heroBanner from '/background_banner.jpg';
+import heroBanner from '../../assets/hero_banner.jpg';
 import playIcon from '../../assets/play_icon.png';
 import infoIcon from '../../assets/info_icon.png';
 import MovieRow from '../MovieRow/MovieRow';

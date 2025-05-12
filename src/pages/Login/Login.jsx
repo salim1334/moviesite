@@ -1,11 +1,48 @@
-import styles from './Login.module.css'
+import styles from './Login.module.css';
+import logo from '../../assets/logo.png';
+import { useState } from 'react';
 
 function Login() {
+  const [signState, setSignState] = useState('Sign In');
+
   return (
     <div className={styles.login}>
-      
+      <img src={logo} alt="Logo" className={styles.login_logo} />
+      <div className={styles.login_form}>
+        <h1>{signState}</h1>
+        <form>
+          {signState === 'Sign Up' && (
+            <input type="text" placeholder="Your name" />
+          )}
+
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <button>{signState}</button>
+          <div className={styles.form_help}>
+            <div className={styles.remember}>
+              <input type="checkbox" />
+              <label htmlFor="">Remember Me</label>
+            </div>
+            <p>Need help?</p>
+          </div>
+        </form>
+
+        <div className={styles.form_switch}>
+          {signState === 'Sign In' ? (
+            <p>
+              New to Netflix?
+              <span onClick={() => setSignState('Sign Up')}>Sign Up Now</span>
+            </p>
+          ) : (
+            <p>
+              Already have account?
+              <span onClick={() => setSignState('Sign In')}>Sign In Now</span>
+            </p>
+          )}
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
