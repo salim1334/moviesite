@@ -31,10 +31,10 @@ function Main() {
       </div>
 
       <div className={styles.more_cards}>
-        <MovieRow title='Blockbuster Movies' />
-        <MovieRow title='Only on Netflix' />
-        <MovieRow title='Upcoming' />
-        <MovieRow title='Top Pics for you' />
+        <MovieRow title="Blockbuster Movies" category="top_rated" />
+        <MovieRow title="Only on Netflix" category="popular" />
+        <MovieRow title="Upcoming" category="upcoming" />
+        <MovieRow title="Top Pics for you" category="now_playing" />
       </div>
     </>
   );

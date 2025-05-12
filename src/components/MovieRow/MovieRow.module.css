@@ -1,9 +1,9 @@
-.title_cards {
+.movieRow {
   margin-top: 50px;
   margin-bottom: 30px;
 }
 
-.title_cards h2 {
+.movieRow h2 {
   margin-bottom: 8px;
 }
 
@@ -37,12 +37,12 @@
 }
 
 @media (max-width: 800px) {
-  .title_cards {
+  .movieRow {
     margin-top: 20px;
     margin-bottom: 0;
   }
 
-  .title_cards h2 {
+  .movieRow h2 {
     font-size: 20px;
   }
 
@@ -55,7 +55,7 @@
   }
 }
 @media (max-width: 500px) {
-  .title_cards h2 {
+  .movieRow h2 {
     font-size: 15px;
   }
 
