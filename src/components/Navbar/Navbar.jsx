@@ -5,6 +5,7 @@ import bellIcon from '../../assets/bell_icon.svg';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccountBoxIcon from '@mui/icons-material/AccountBoxOutlined';
 import { useEffect, useRef } from 'react';
+import { logout } from '../../../firebase/firebase';
 
 function Navbar() {
   const navRef = useRef();
@@ -12,9 +13,9 @@ function Navbar() {
   useEffect(() => { 
     window.addEventListener('scroll', () => {
       if (window.scrollY >= 80) {
-        navRef.current.classList.add(styles.nav_dark);
+        navRef.current?.classList.add(styles.nav_dark);
       } else {
-        navRef.current.classList.remove(styles.nav_dark);
+        navRef.current?.classList.remove(styles.nav_dark);
       }
     });
   }, []);
@@ -42,7 +43,7 @@ function Navbar() {
           <ArrowDropDownIcon />
           {/* Logout text */}
           <div className={styles.dropdown}>
-            <p>Sign Out</p>
+            <p onClick={() => logout()}>Sign Out</p>
           </div>
         </div>
       </div>
