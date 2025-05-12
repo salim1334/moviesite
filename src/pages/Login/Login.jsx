@@ -2,24 +2,32 @@ import styles from './Login.module.css';
 import logo from '../../assets/logo.png';
 import { useState } from 'react';
 import { login, signup } from '../../../firebase/firebase';
+import spinner from '../../assets/loading_with_logo.gif'
 
 function Login() {
   const [signState, setSignState] = useState('Sign In');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const user_auth = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (signState === 'Sign In') {
       await login(email, password);
     } else {
       await signup(name, email, password);
     }
+    setLoading(false);
   };
 
-  return (
+  return loading ? (
+    <div className={styles.login_spinner}>
+      <img src={spinner} alt="spinner" />
+    </div>
+  ) : (
     <div className={styles.login}>
       <img src={logo} alt="Logo" className={styles.login_logo} />
       <div className={styles.login_form}>
@@ -46,7 +54,9 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={user_auth} type='submit'>{signState}</button>
+          <button onClick={user_auth} type="submit">
+            {signState}
+          </button>
           <div className={styles.form_help}>
             <div className={styles.remember}>
               <input type="checkbox" />

@@ -1,5 +1,6 @@
 import styles from './Main.module.css';
 import heroBanner from '../../assets/hero_banner.jpg';
+import smallHeroBanner from '../../assets/small_hero_banner.jpg';
 import playIcon from '../../assets/play_icon.png';
 import infoIcon from '../../assets/info_icon.png';
 import MovieRow from '../MovieRow/MovieRow';
@@ -8,7 +9,14 @@ function Main() {
   return (
     <>
       <div className={styles.hero}>
-        <img src={heroBanner} alt="Hero Banner" className={styles.banner_img} />
+        <picture>
+          <source srcSet={smallHeroBanner} media="(max-width: 700px)" />
+          <img
+            src={heroBanner}
+            alt="Hero Banner"
+            className={styles.banner_img}
+          />
+        </picture>
 
         <div className={styles.hero_caption}>
           <h2>Viking Wolf</h2>
@@ -26,7 +34,7 @@ function Main() {
               More Info
             </button>
           </div>
-          <MovieRow />
+          <MovieRow isPoster={true} />
         </div>
       </div>
 

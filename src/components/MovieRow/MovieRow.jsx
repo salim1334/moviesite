@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './MovieRow.module.css';
 import {Link} from 'react-router-dom'
 
-function MovieRow({ title, category }) {
+function MovieRow({ title, category, isPoster }) {
   const [movies, setMovies] = useState([]);
 
   const options = {
@@ -33,8 +33,11 @@ function MovieRow({ title, category }) {
           return (
             <Link to={`/player/${card.id}`} className={styles.card} key={i}>
               <img
-                src={`https://image.tmdb.org/t/p/w500${card.backdrop_path}`}
+                src={`https://image.tmdb.org/t/p/w500${
+                  isPoster ? card.poster_path : card.backdrop_path
+                }`}
                 alt="Movie Poster"
+                className={`row__poster ${isPoster ? 'row__posterLarge' : ''}`}
               />
               <p>{card.original_title}</p>
             </Link>

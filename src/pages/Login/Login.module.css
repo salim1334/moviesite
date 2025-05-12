@@ -102,19 +102,23 @@
 }
 
 .login_spinner img {
-  width: 160px;
+  width: 260px;
 }
 
 @media (max-width: 500px) {
   .login {
     padding: 10px 5%;
     display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .login_logo {
     margin-top: 50px;
+  }
+
+  .login_form {
+    margin-top: 160px;
   }
 }

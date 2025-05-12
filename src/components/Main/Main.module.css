@@ -5,7 +5,7 @@
 .banner_img {
   /* Added */
   width: 100%;
-  height: 110vh;
+  height: 120vh;
   object-fit: cover;
   mask-image: linear-gradient(to right, transparent, black 75%);
   -webkit-mask-image: linear-gradient(to right, transparent, black 75%);
@@ -19,7 +19,7 @@
 }
 
 .hero_caption p {
-  max-width: 600px;
+  max-width: 50vw;
   font-size: 16px;
   margin-bottom: 10px;
 }
@@ -62,7 +62,7 @@
 }
 
 .more_cards {
-  padding: 6%;
+  padding: 4% 6%;
 }
 
 @media (max-width: 1024px) {
@@ -78,7 +78,11 @@
 @media (max-width: 800px) {
   /* Added */
   .banner_img {
-    height: 90vh;
+    height: 70vh;
+  }
+
+  .hero_caption p {
+    max-width: 70vw;
   }
 
   .hero_caption {
