@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './MovieRow.module.css';
+import {Link} from 'react-router-dom'
 
 function MovieRow({ title, category }) {
   const [movies, setMovies] = useState([]);
@@ -31,13 +32,13 @@ function MovieRow({ title, category }) {
       <div className={styles.card_list}>
         {movies?.map((card, i) => {
           return (
-            <div className={styles.card} key={i}>
+            <Link to={`/player/${card.id}`} className={styles.card} key={i}>
               <img
                 src={`https://image.tmdb.org/t/p/w500${card.backdrop_path}`}
                 alt="Movie Poster"
               />
               <p>{card.original_title}</p>
-            </div>
+            </Link>
           );
         })}
       </div>

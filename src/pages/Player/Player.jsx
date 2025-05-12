@@ -1,10 +1,11 @@
 import styles from './Player.module.css'
 import backArrowIcon from '../../assets/back_arrow_icon.png';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Player() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState({});
 
   const options = {
@@ -28,7 +29,7 @@ function Player() {
 
   return (
     <div className={styles.player}>
-      <img src={backArrowIcon} alt="Back Arrow" />
+      <img src={backArrowIcon} alt="Back Arrow" onClick={() => navigate(-2)} />
       <iframe
         width="90%"
         height="90%"
@@ -38,7 +39,7 @@ function Player() {
         allowFullScreen
       ></iframe>
       <div className={styles.player_info}>
-        <p>{movie.published_at.slice(0, 10)}</p>
+        <p>{movie.published_at?.slice(0, 10)}</p>
         <p>{movie.name}</p>
         <p>{movie.type}</p>
       </div>
