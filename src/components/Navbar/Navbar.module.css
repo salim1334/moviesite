@@ -47,12 +47,6 @@
   align-items: center;
 }
 
-.rightCon > *:hover {
-  color: #e50914;
-  transform: scale(1.02);
-  text-decoration: underline;
-}
-
 .rightCon .icons {
   width: 20px;
   cursor: pointer;
@@ -92,8 +86,13 @@
 
 .navbar .dropdown p {
   font-size: 14px;
-  text-decoration: underline;
   cursor: pointer;
+}
+
+.navbar .dropdown p:hover {
+  color: #e50914;
+  transform: scale(1.02);
+  text-decoration: underline;
 }
 
 .profileCon:hover .dropdown {
