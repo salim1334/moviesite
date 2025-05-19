@@ -21,7 +21,7 @@
 }
 
 .leftCon img {
-  width: 90px;
+  width: 110px;
 }
 
 .leftCon ul {
@@ -79,7 +79,6 @@
   border-radius: 4px;
   background-color: #191919;
   padding: 16px 20px;
-  border-radius: underline;
   z-index: 1;
   display: none;
 }
@@ -117,13 +116,13 @@
   }
 
   .navbar img {
-    height: 25px;
+    height: 30px;
   }
 }
 
 @media (max-width: 500px) {
   .navbar img {
-    height: 20px;
+    height: 25px;
   }
 
   .rightCon {

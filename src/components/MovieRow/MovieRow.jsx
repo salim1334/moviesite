@@ -1,10 +1,24 @@
-import { useEffect, useState } from 'react';
+// Import hooks and styles
+import { useEffect, useState, useRef } from 'react';
 import styles from './MovieRow.module.css';
-import { Link } from 'react-router-dom';
 
 function MovieRow({ title, category, isPoster }) {
+  // State to store movies for this row
   const [movies, setMovies] = useState([]);
 
+  // State to track currently selected movie for trailer
+  const [selectedMovie, setSelectedMovie] = useState(null);
+
+  // State to store the YouTube video key of the trailer
+  const [videoKey, setVideoKey] = useState('');
+
+  // State to show loading indicator while fetching trailer
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Ref used to scroll to the trailer player
+  const playerRef = useRef(null);
+
+  // Authorization headers for TMDB API requests
   const options = {
     method: 'GET',
     headers: {
@@ -13,6 +27,7 @@ function MovieRow({ title, category, isPoster }) {
     },
   };
 
+  // Fetch movies when the component mounts
   useEffect(() => {
     fetch(
       `https://api.themoviedb.org/3/movie/${
@@ -21,31 +36,111 @@ function MovieRow({ title, category, isPoster }) {
       options
     )
       .then((res) => res.json())
-      .then((res) => setMovies(res.results))
+      .then((res) => setMovies(res.results)) // Set the fetched movie list
       .catch((err) => console.error(err));
   }, []);
 
+  // Handle user click to play a movie trailer
+  const handleClick = async (id) => {
+    // If same movie is clicked again or if it's just a poster row, toggle off
+    if (selectedMovie === id || isPoster) {
+      setSelectedMovie(null);
+      setVideoKey('');
+      return;
+    }
+
+    // Reset any previously selected trailer
+    setSelectedMovie(null);
+    setVideoKey('');
+    setIsLoading(true);
+
+    // Delay to show loader before fetching trailer
+    setTimeout(async () => {
+      try {
+        // Fetch trailer videos for selected movie
+        const res = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
+          options
+        );
+        const data = await res.json();
+
+        // Find the trailer hosted on YouTube
+        const trailer = data.results.find(
+          (v) => v.site === 'YouTube' && v.type === 'Trailer'
+        );
+
+        if (trailer) {
+          setSelectedMovie(id); // Set current movie ID
+          setVideoKey(trailer.key); // Set video key for embed
+
+          // Scroll to video player after slight delay
+          setTimeout(() => {
+            playerRef.current?.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        } else {
+          alert('No trailer found for this movie.');
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 200);
+  };
+
   return (
     <div className={styles.movieRow}>
+      {/* Section title */}
       <h2>{title ? title : 'Popular Movies'}</h2>
-      <div className={styles.fadeLeft}></div>
-      <div className={styles.fadeRight}></div>
+
+      {/* Display list of movie cards */}
       <div className={styles.card_list}>
-        {movies?.map((card, i) => {
-          return (
-            <Link to={`/player/${card.id}`} className={styles.card} key={i}>
-              <img
-                src={`https://image.tmdb.org/t/p/w500${
-                  isPoster ? card.poster_path : card.backdrop_path
-                }`}
-                alt="Movie Poster"
-                className={`row__poster ${isPoster ? 'row__posterLarge' : ''}`}
-              />
-              <p>{card.original_title}</p>
-            </Link>
-          );
-        })}
+        {movies?.map((card) => (
+          <div
+            className={styles.card}
+            key={card.id}
+            onClick={() => handleClick(card.id)}
+            style={{ cursor: 'pointer' }}
+          >
+            <img
+              src={`https://image.tmdb.org/t/p/w500${
+                isPoster ? card.poster_path : card.backdrop_path
+              }`}
+              alt="Movie Poster"
+              className={`row__poster ${isPoster ? 'row__posterLarge' : ''}`}
+            />
+            <p>{card.original_title}</p>
+          </div>
+        ))}
       </div>
+
+      {/* Show loading spinner while trailer is loading */}
+      {isLoading && (
+        <div className="movieLoading">
+          <div className="movieSpinner"></div>
+          <p>Loading trailer...</p>
+        </div>
+      )}
+
+      {/* Embed YouTube trailer video if available */}
+      {videoKey && !isLoading && (
+        <div ref={playerRef} className="embedMovie">
+          <button
+            onClick={() => {
+              setSelectedMovie(null);
+              setVideoKey('');
+            }}
+          ></button>
+          <iframe
+            width="100%"
+            height="350"
+            src={`https://www.youtube.com/embed/${videoKey}`}
+            title="trailer"
+            frameBorder="0"
+            allowFullScreen
+          ></iframe>
+        </div>
+      )}
     </div>
   );
 }

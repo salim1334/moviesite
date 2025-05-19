@@ -1,16 +1,17 @@
-import styles from './Navbar.module.css'
-import logo from '../../assets/logo.png'
+import styles from './Navbar.module.css';
+import logo from '../../assets/logo.png';
 import searchIcon from '../../assets/search_icon.svg';
 import bellIcon from '../../assets/bell_icon.svg';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccountBoxIcon from '@mui/icons-material/AccountBoxOutlined';
 import { useEffect, useRef } from 'react';
 import { logout } from '../../../firebase/firebase';
+import { toast } from 'react-toastify';
 
 function Navbar() {
   const navRef = useRef();
 
-  useEffect(() => { 
+  useEffect(() => {
     window.addEventListener('scroll', () => {
       if (window.scrollY >= 80) {
         navRef.current?.classList.add(styles.nav_dark);
@@ -43,7 +44,9 @@ function Navbar() {
           <ArrowDropDownIcon />
           {/* Logout text */}
           <div className={styles.dropdown}>
-            <p onClick={() => logout()}>Sign Out</p>
+            <p onClick={() => logout().then(() => {
+      toast.success('Signed out!');
+    })}>Sign Out</p>
           </div>
         </div>
       </div>
@@ -51,4 +54,4 @@ function Navbar() {
   );
 }
 
-export default Navbar
+export default Navbar;

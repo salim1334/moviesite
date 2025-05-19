@@ -43,7 +43,7 @@
   }
 
   .movieRow h2 {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .card_list img {
@@ -51,12 +51,12 @@
   }
 
   .card_list p {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 @media (max-width: 500px) {
   .movieRow h2 {
-    font-size: 15px;
+    font-size: 20px;
   }
 
   .card_list img {
@@ -64,29 +64,6 @@
   }
 
   .card_list p {
-    font-size: 10px;
+    font-size: 13px;
   }
-}
-
-.movieRow {
-  position: relative;
-}
-
-.fadeLeft,
-.fadeRight {
-  position: absolute;
-  top: 0;
-  width: 50px;
-  height: 100%;
-  z-index: 10;
-}
-
-.fadeLeft {
-  left: 0;
-  background: linear-gradient(to right, #141414, transparent);
-}
-
-.fadeRight {
-  right: 0;
-  background: linear-gradient(to left, #141414, transparent);
 }
