@@ -1,10 +1,12 @@
+import React, { useEffect, Suspense } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import Home from './pages/Home/Home';
-import Login from './pages/Login/Login';
-import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import { ToastContainer } from 'react-toastify';
+
+// Lazy load components
+const Home = React.lazy(() => import('./pages/Home/Home'));
+const Login = React.lazy(() => import('./pages/Login/Login'));
 
 function App() {
   const navigate = useNavigate();
@@ -31,14 +33,21 @@ function App() {
 
   return (
     <div>
-      {/* Toast notifications */}
       <ToastContainer theme="dark" />
 
-      {/* Routing */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+      {/* Suspense for lazy loaded routes */}
+      <Suspense
+        fallback={
+          <div style={{ color: 'white', textAlign: 'center' }}>
+            Loading page...
+          </div>
+        }
+      >
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }
