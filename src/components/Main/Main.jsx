@@ -1,26 +1,18 @@
-// Import CSS styles and required assets
 import styles from './Main.module.css';
 import playIcon from '../../assets/play_icon.png';
 import infoIcon from '../../assets/info_icon.png';
-
-// Import dependencies and components
 import MovieRow from '../MovieRow/MovieRow';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Main() {
-  // State for the featured movie on the hero banner
   const [featuredMovie, setFeaturedMovie] = useState(null);
-
-  // State to hold the YouTube trailer video key
   const [videoKey, setVideoKey] = useState('');
-
-  // State to handle loading state when trailer is being fetched
   const [isLoading, setIsLoading] = useState(false);
-
-  // Ref for scrolling to the trailer player
+  const [imgNotFound, setImgNotFound] = useState(false);
   const playerRef = useRef(null);
+  const navigate = useNavigate();
 
-  // Options for the API request including authorization headers
   const options = {
     method: 'GET',
     headers: {
@@ -29,43 +21,56 @@ function Main() {
     },
   };
 
-  // Fetch list of currently playing movies when the component mounts
   useEffect(() => {
+    // Check session storage for existing movie and its timestamp
+    const savedMovie = JSON.parse(sessionStorage.getItem('featuredMovie'));
+    const now = Date.now();
+    const oneHour = 30 * 60 * 1000; // 1 hour in milliseconds
+
+    // Use saved movie if it exists and isn't expired
+    if (savedMovie && now - savedMovie.timestamp < oneHour) {
+      setFeaturedMovie(savedMovie.movie);
+      return;
+    }
+
     fetch(
       `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`,
       options
     )
       .then((res) => res.json())
       .then((res) => {
-        // Randomly select one movie to feature in the hero section
         if (res.results.length) {
           const randomMovie =
             res.results[Math.floor(Math.random() * res.results.length)];
+          if (!randomMovie.backdrop_path) setImgNotFound(true);
           setFeaturedMovie(randomMovie);
+          // Save with current timestamp
+          sessionStorage.setItem(
+            'featuredMovie',
+            JSON.stringify({
+              movie: randomMovie,
+              timestamp: now,
+            })
+          );
         }
       })
       .catch((err) => console.error(err));
-  }, []);
+    setImgNotFound(false);
+  }, [imgNotFound]);
 
-  // Handle click on "Play" button: fetch movie trailer by movie ID
   const handleClick = async (id) => {
     try {
       setIsLoading(true);
-
       const res = await fetch(
         `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
         options
       );
       const data = await res.json();
-
-      // Find YouTube trailer in the video results
       const trailer = data.results.find(
         (v) => v.site === 'YouTube' && v.type === 'Trailer'
       );
-
       if (trailer) {
-        setVideoKey(trailer.key); // Set the video key for the iframe
-        // Scroll smoothly to the player section after a small delay
+        setVideoKey(trailer.key);
         setTimeout(() => {
           playerRef.current?.scrollIntoView({ behavior: 'smooth' });
         }, 50);
@@ -79,7 +84,17 @@ function Main() {
     }
   };
 
-  // Extract data from featured movie for display
+  const handleMoreInfo = (event, id) => {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log('More Info clicked, movieId:', id); // Debug log
+    if (id) {
+      navigate(`/movie/${id}`);
+    } else {
+      console.warn('No movieId provided');
+    }
+  };
+
   const src = featuredMovie?.backdrop_path;
   const para = featuredMovie?.overview;
   const title = featuredMovie?.original_title;
@@ -87,7 +102,6 @@ function Main() {
 
   return (
     <>
-      {/* Hero section with background image and movie info */}
       <div className={styles.hero}>
         {src && (
           <img
@@ -96,44 +110,41 @@ function Main() {
             className={styles.banner_img}
           />
         )}
-
         <div className={styles.hero_caption}>
           <h1>{title || 'Loading...'}</h1>
           <p className={styles.bannerDesc}>{para || ''}</p>
-
-          {/* Action buttons: Play and More Info */}
           <div className={styles.hero_btns}>
             <button
               className={styles.btn}
               onClick={() => movieId && handleClick(movieId)}
               disabled={!movieId}
+              aria-label={`Play trailer for ${title || 'movie'}`}
             >
               <img src={playIcon} alt="Play Icon" />
               Play
             </button>
-
-            <button className={`${styles.btn} ${styles.dark_btn}`}>
+            <button
+              className={`${styles.btn} ${styles.dark_btn}`}
+              onClick={(e) => 
+                handleMoreInfo(e, movieId)
+              }
+              disabled={!movieId}
+              aria-label={`More information about ${title || 'movie'}`}
+            >
               <img src={infoIcon} alt="Info Icon" />
               More Info
             </button>
           </div>
-
-          {/* Row of movies shown under the hero banner */}
           <MovieRow isPoster={true} />
         </div>
       </div>
-
-      {/* Additional content including trailer player and more movie rows */}
       <div className={styles.more_cards}>
-        {/* Show loader when trailer is being fetched */}
         {isLoading && (
           <div className="movieLoading">
             <div className="movieSpinner"></div>
             <p>Loading trailer...</p>
           </div>
         )}
-
-        {/* Show embedded YouTube trailer when videoKey is set */}
         {videoKey && !isLoading && (
           <div ref={playerRef} className="embedMovie">
             <button
@@ -151,12 +162,10 @@ function Main() {
             ></iframe>
           </div>
         )}
-
-        {/* Display multiple movie rows by category */}
-        <MovieRow title="Blockbuster Movies" category="top_rated" />
-        <MovieRow title="Only on Netflix" category="popular" />
-        <MovieRow title="Upcoming" category="upcoming" />
-        <MovieRow title="Top Picks for you" category="now_playing" />
+        <MovieRow title="Blockbuster Movies" category="top_rated" page={1} />
+        <MovieRow title="Only on Netflix" category="popular" page={2} />
+        <MovieRow title="Upcoming" category="upcoming" page={3} />
+        <MovieRow title="Top Picks for you" category="now_playing" page={4} />
       </div>
     </>
   );

@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import { ToastContainer } from 'react-toastify';
+import MovieDetails from './pages/MovieDetails/MovieDetails';
 
 // Lazy load components
 const Home = React.lazy(() => import('./pages/Home/Home'));
@@ -12,30 +13,26 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Listen to authentication state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      const currentPath = window.location.pathname;
-
-      // Redirect authenticated user to homepage if not already there
-      if (user && currentPath !== '/') {
-        navigate('/');
-      }
-
-      // Redirect unauthenticated user to login page if not already there
-      if (!user && currentPath !== '/login') {
-        navigate('/login');
+      if (user) {
+        // If user is logged in and on login page, redirect to home
+        if (window.location.pathname === '/login') {
+          navigate('/');
+        }
+      } else {
+        // If user is not logged in and not on login page, redirect to login
+        if (window.location.pathname !== '/login') {
+          navigate('/login');
+        }
       }
     });
 
-    // Cleanup the listener when component unmounts
     return () => unsubscribe();
   }, [navigate]);
 
   return (
     <div>
       <ToastContainer theme="dark" />
-
-      {/* Suspense for lazy loaded routes */}
       <Suspense
         fallback={
           <div style={{ color: 'white', textAlign: 'center' }}>
@@ -46,6 +43,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
         </Routes>
       </Suspense>
     </div>

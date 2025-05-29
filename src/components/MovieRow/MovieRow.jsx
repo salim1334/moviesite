@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from 'react';
 import styles from './MovieRow.module.css';
 
-function MovieRow({ title, category, isPoster }) {
+function MovieRow({ title, category, isPoster, page = 1 }) {
   // State to store movies for this row
   const [movies, setMovies] = useState([]);
 
@@ -32,13 +32,13 @@ function MovieRow({ title, category, isPoster }) {
     fetch(
       `https://api.themoviedb.org/3/movie/${
         category ? category : 'now_playing'
-      }?language=en-US&page=1`,
+      }?language=en-US&page=${page}`,
       options
     )
       .then((res) => res.json())
       .then((res) => setMovies(res.results)) // Set the fetched movie list
       .catch((err) => console.error(err));
-  }, []);
+  }, [category, page]);
 
   // Handle user click to play a movie trailer
   const handleClick = async (id) => {
@@ -95,23 +95,28 @@ function MovieRow({ title, category, isPoster }) {
 
       {/* Display list of movie cards */}
       <div className={styles.card_list}>
-        {movies?.map((card) => (
-          <div
-            className={styles.card}
-            key={card.id}
-            onClick={() => handleClick(card.id)}
-            style={{ cursor: 'pointer' }}
-          >
-            <img
-              src={`https://image.tmdb.org/t/p/w500${
-                isPoster ? card.poster_path : card.backdrop_path
-              }`}
-              alt="Movie Poster"
-              className={`row__poster ${isPoster ? 'row__posterLarge' : ''}`}
-            />
-            <p>{card.original_title}</p>
-          </div>
-        ))}
+        {movies?.map(
+          (card) =>
+            card.backdrop_path && (
+              <div
+                className={styles.card}
+                key={card.id}
+                onClick={() => handleClick(card.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${
+                    isPoster ? card.poster_path : card.backdrop_path
+                  }`}
+                  alt="Movie Poster"
+                  className={`row__poster ${
+                    isPoster ? 'row__posterLarge' : ''
+                  }`}
+                />
+                <p>{card.original_title}</p>
+              </div>
+            )
+        )}
       </div>
 
       {/* Show loading spinner while trailer is loading */}
