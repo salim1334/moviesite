@@ -16,12 +16,12 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // If user is logged in and on login page, redirect to home
-        if (window.location.pathname === '/login') {
+        if (window.location.pathname === '/Netflix_Clone/login') {
           navigate('/');
         }
       } else {
         // If user is not logged in and not on login page, redirect to login
-        if (window.location.pathname !== '/login') {
+        if (window.location.pathname !== '/Netflix_Clone/login') {
           navigate('/login');
         }
       }
