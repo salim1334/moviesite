@@ -28,7 +28,7 @@ function Login() {
         await signup(name, email, password);
       }
     } catch (error) {
-      alert(error.message); // You can handle errors better here
+      console.error(error.message); // You can handle errors better here
     } finally {
       setLoading(false);
     }
