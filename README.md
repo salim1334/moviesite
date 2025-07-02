@@ -140,4 +140,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-**Built with ❤️ by [Your Name] — add this project to your portfolio!**
+**Built with ❤️ by salim — add this project to your portfolio!**
